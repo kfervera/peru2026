@@ -17,7 +17,7 @@
 
     header {
       text-align: center;
-      margin-bottom: 32px;
+      margin-bottom: 28px;
     }
 
     header h1 {
@@ -31,6 +31,22 @@
       margin-top: 6px;
       font-size: 0.95rem;
     }
+
+    .flag-strip {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin: 12px auto;
+      width: 180px;
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .flag-strip span { flex: 1; }
+    .flag-strip span:nth-child(1) { background: #D91023; }
+    .flag-strip span:nth-child(2) { background: #ffffff; border: 1px solid #eee; }
+    .flag-strip span:nth-child(3) { background: #D91023; }
 
     .btn-limpiar {
       margin-top: 14px;
@@ -47,138 +63,161 @@
       transition: background 0.2s, color 0.2s, border-color 0.2s;
     }
 
-    .btn-limpiar:hover {
-      background: #fef2f2;
-      color: #b91c1c;
-      border-color: #fca5a5;
-    }
-
+    .btn-limpiar:hover { background: #fef2f2; color: #b91c1c; border-color: #fca5a5; }
     .btn-limpiar:active { transform: scale(0.97); }
 
-    .flag-strip {
-      display: flex;
-      justify-content: center;
-      gap: 0;
-      margin: 12px auto;
-      width: 180px;
-      height: 8px;
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .flag-strip span { flex: 1; }
-    .flag-strip span:nth-child(1) { background: #D91023; }
-    .flag-strip span:nth-child(2) { background: #ffffff; }
-    .flag-strip span:nth-child(3) { background: #D91023; }
-
     .main-container {
-      max-width: 800px;
+      max-width: 820px;
       margin: 0 auto;
     }
 
-    #candidatos-lista {
+    #candidatos-lista,
+    #desestimados-lista {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
     }
 
     .card {
       background: #fff;
       border-radius: 14px;
       box-shadow: 0 2px 10px rgba(0,0,0,0.07);
-      padding: 18px 20px;
       display: flex;
-      flex-direction: column;
-      gap: 14px;
-      transition: opacity 0.3s, transform 0.3s;
-      border-left: 5px solid var(--party-color, #ccc);
+      flex-direction: row;
+      overflow: hidden;
+      transition: opacity 0.3s;
+      position: relative;
+      border-left: 5px solid #D91023;
     }
 
     .card.desestimado {
-      opacity: 0.55;
+      opacity: 0.5;
       background: #f8f8f8;
-      border-left-color: #999;
+      border-left-color: #ccc;
     }
 
-    .card-top {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      position: relative;
-    }
-
-    .order-num {
-      position: absolute;
-      top: -6px;
-      right: -6px;
-      font-size: 0.7rem;
-      font-weight: 800;
-      color: #aaa;
-      background: #f0f0f0;
-      border-radius: 20px;
-      padding: 2px 8px;
-      letter-spacing: 0.3px;
-    }
-
-    .desestimado .order-num { color: #ccc; }
-
-    .party-logo {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
+    /* ── Left column: logo + photo side by side, full height ── */
+    .card-left {
+      width: 120px;
       flex-shrink: 0;
+      display: flex;
+      flex-direction: row;
+    }
+
+    .party-logo-wrap {
+      flex: 1;
+      background: #f5f5f5;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 900;
-      font-size: 0.9rem;
+      overflow: hidden;
+      border-right: 1px solid #ebebeb;
+    }
+
+    .party-logo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 6px;
+    }
+
+    .party-logo-fallback {
+      font-size: 0.6rem;
+      font-weight: 800;
       color: #fff;
-      background: var(--party-color, #888);
-      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-      letter-spacing: 0.5px;
-      line-height: 1.1;
+      background: #bbb;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       text-align: center;
       padding: 4px;
-      border: 3px solid rgba(255,255,255,0.5);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      line-height: 1.2;
     }
 
-    .card-info { flex: 1; min-width: 0; }
+    .candidate-photo-wrap {
+      flex: 1;
+      overflow: hidden;
+      background: #e5e7eb;
+    }
+
+    .candidate-photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+    }
+
+    /* ── Right content area ── */
+    .card-content {
+      flex: 1;
+      min-width: 0;
+      padding: 12px 36px 12px 14px; /* right padding leaves room for #N badge */
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card-info { min-width: 0; }
 
     .party-name {
-      font-size: 0.78rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--party-color, #555);
-      margin-bottom: 3px;
-    }
-
-    .candidate-name {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: #1a1a2e;
-    }
-
-    .desestimado .candidate-name,
-    .desestimado .party-name { color: #999; }
-
-    .badge-desestimado {
-      display: none;
       font-size: 0.7rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.4px;
+      color: #D91023;
+      margin-bottom: 3px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .desestimado .party-name { color: #bbb; }
+
+    .candidate-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #1a1a2e;
+      line-height: 1.25;
+    }
+
+    .desestimado .candidate-name { color: #aaa; }
+
+    .badge-desestimado {
+      display: none;
+      font-size: 0.67rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
       color: #fff;
-      background: #999;
+      background: #bbb;
       border-radius: 20px;
-      padding: 2px 10px;
+      padding: 2px 9px;
       margin-top: 5px;
       width: fit-content;
     }
 
     .desestimado .badge-desestimado { display: block; }
 
+    /* ── Order number — top right ── */
+    .order-num {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      font-size: 0.67rem;
+      font-weight: 800;
+      color: #aaa;
+      background: #f0f0f0;
+      border-radius: 20px;
+      padding: 2px 7px;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+
+    .desestimado .order-num { color: #ccc; }
+
+    /* ── Bottom controls ── */
     .card-bottom {
       display: flex;
       gap: 10px;
@@ -189,11 +228,11 @@
       flex: 1;
       border: 1.5px solid #e0e0e0;
       border-radius: 8px;
-      padding: 9px 12px;
-      font-size: 0.88rem;
+      padding: 8px 12px;
+      font-size: 0.87rem;
       font-family: inherit;
       resize: none;
-      height: 48px;
+      height: 44px;
       transition: border-color 0.2s;
       background: #fafafa;
       color: #333;
@@ -201,21 +240,18 @@
 
     .card-bottom textarea:focus {
       outline: none;
-      border-color: var(--party-color, #888);
+      border-color: #D91023;
       background: #fff;
     }
 
-    .desestimado .card-bottom textarea {
-      background: #f0f0f0;
-      color: #aaa;
-    }
+    .desestimado .card-bottom textarea { background: #f0f0f0; color: #aaa; }
 
     .btn-desestimar {
-      padding: 0 16px;
+      padding: 0 14px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.4px;
@@ -230,11 +266,11 @@
     .btn-desestimar:active { transform: scale(0.97); }
 
     .btn-restaurar {
-      padding: 0 16px;
+      padding: 0 14px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.4px;
@@ -249,55 +285,46 @@
     .btn-restaurar:active { transform: scale(0.97); }
 
     .seccion-label {
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 1px;
       color: #999;
       padding: 0 4px;
-      margin: 20px 0 6px;
+      margin: 18px 0 6px;
     }
 
     footer {
       text-align: center;
-      margin-top: 40px;
-      font-size: 0.78rem;
+      margin-top: 36px;
+      font-size: 0.75rem;
       color: #aaa;
+      line-height: 1.6;
     }
 
+    footer a { color: #aaa; }
+
     /* ── Responsive ── */
-    @media (max-width: 600px) {
-      body { padding: 16px 10px; }
+    @media (max-width: 560px) {
+      body { padding: 14px 10px; }
 
-      .card { padding: 14px 14px; }
+      .card-left { width: 90px; }
+      .card-content { padding: 10px 32px 10px 12px; }
 
-      .party-logo {
-        width: 46px;
-        height: 46px;
-        font-size: 0.75rem;
-      }
-
-      .candidate-name { font-size: 0.97rem; }
+      .candidate-name { font-size: 0.9rem; }
+      .party-name { font-size: 0.65rem; }
 
       .card-bottom {
         flex-direction: column;
         gap: 8px;
       }
 
-      .card-bottom textarea { height: 42px; }
+      .card-bottom textarea { height: 40px; }
 
       .btn-desestimar,
       .btn-restaurar {
         width: 100%;
         padding: 10px;
-        font-size: 0.8rem;
-      }
-
-      .order-num {
-        top: -4px;
-        right: -2px;
-        font-size: 0.65rem;
-        padding: 2px 6px;
       }
     }
   </style>
@@ -307,362 +334,160 @@
 <header>
   <div class="flag-strip"><span></span><span></span><span></span></div>
   <h1>Elecciones Presidenciales Perú 2026</h1>
-  <p>12 de abril de 2026 &mdash; Lista de candidatos</p>
-  <button class="btn-limpiar" id="btn-limpiar" onclick="limpiarTodo()">&#x21BA; Limpiar todos los cambios</button>
+  <p>12 de abril de 2026 &mdash; 36 fórmulas presidenciales</p>
+  <button class="btn-limpiar" onclick="limpiarTodo()">&#x21BA; Limpiar todos los cambios</button>
 </header>
 
 <div class="main-container">
   <div id="seccion-activos" class="seccion-label">Candidatos</div>
   <div id="candidatos-lista"></div>
   <div id="seccion-desestimados" class="seccion-label" style="display:none;">Desestimados</div>
-  <div id="desestimados-lista" style="display:flex;flex-direction:column;gap:14px;"></div>
-  <footer>Los datos mostrados corresponden a los candidatos inscritos para las elecciones generales del 12 de abril de 2026.</footer>
+  <div id="desestimados-lista"></div>
+  <footer>
+    Datos oficiales: <a href="https://votoinformado.jne.gob.pe" target="_blank">JNE – Voto Informado</a> &mdash; Elecciones Generales 2026
+  </footer>
 </div>
 
 <script>
+  // Datos extraídos directamente de votoinformado.jne.gob.pe (data.html)
   const CANDIDATOS_BASE = [
-    {
-      id: "keiko",
-      partido: "Fuerza Popular",
-      siglas: "FP",
-      candidato: "Keiko Fujimori",
-      color: "#E8590C"
-    },
-    {
-      id: "lopez-aliaga",
-      partido: "Renovación Popular",
-      siglas: "RP",
-      candidato: "Rafael López Aliaga",
-      color: "#1A9FD5"
-    },
-    {
-      id: "acuna",
-      partido: "Alianza para el Progreso",
-      siglas: "APP",
-      candidato: "César Acuña",
-      color: "#003F8A"
-    },
-    {
-      id: "forsyth",
-      partido: "Somos Perú",
-      siglas: "SP",
-      candidato: "George Forsyth",
-      color: "#CC0000"
-    },
-    {
-      id: "luna",
-      partido: "Podemos Perú",
-      siglas: "PP",
-      candidato: "José Luna Gálvez",
-      color: "#F5A623"
-    },
-    {
-      id: "williams",
-      partido: "Avanza País",
-      siglas: "AvP",
-      candidato: "José Williams Zapata",
-      color: "#2D7A2D"
-    },
-    {
-      id: "valderrama",
-      partido: "Partido Aprista Peruano",
-      siglas: "APRA",
-      candidato: "Enrique Valderrama",
-      color: "#8B0000"
-    },
-    {
-      id: "sanchez",
-      partido: "Juntos por el Perú",
-      siglas: "JP",
-      candidato: "Roberto Sánchez",
-      color: "#6A0DAD"
-    },
-    {
-      id: "lescano",
-      partido: "Acción Popular",
-      siglas: "AP",
-      candidato: "Yonhy Lescano",
-      color: "#D4A017"
-    },
-    {
-      id: "olivera",
-      partido: "Frente de la Esperanza",
-      siglas: "FE",
-      candidato: "Fernando Olivera",
-      color: "#1B6CA8"
-    },
-    {
-      id: "alvarez",
-      partido: "País Para Todos",
-      siglas: "PPT",
-      candidato: "Carlos Álvarez",
-      color: "#444444"
-    },
-    {
-      id: "lopez-chau",
-      partido: "Ahora Nación",
-      siglas: "AN",
-      candidato: "Alfonso López-Chau",
-      color: "#B22222"
-    },
-    {
-      id: "molinelli",
-      partido: "Fuerza y Libertad",
-      siglas: "FL",
-      candidato: "Fiorella Molinelli",
-      color: "#7B3F9E"
-    },
-    {
-      id: "chiabra",
-      partido: "Unidad Nacional",
-      siglas: "UN",
-      candidato: "Roberto Chiabra",
-      color: "#00695C"
-    },
-    {
-      id: "cerron",
-      partido: "Perú Libre",
-      siglas: "PL",
-      candidato: "Vladimir Cerrón",
-      color: "#D00000"
-    },
-    {
-      id: "vizcarra",
-      partido: "Perú Primero",
-      siglas: "PP1",
-      candidato: "Mario Vizcarra",
-      color: "#1B3A6B"
-    },
-    {
-      id: "belmont",
-      partido: "OBRAS",
-      siglas: "OBR",
-      candidato: "Ricardo Belmont",
-      color: "#2255A4"
-    },
-    {
-      id: "humala-antauro",
-      partido: "Partido Ande",
-      siglas: "ANDE",
-      candidato: "Antauro Humala",
-      color: "#5A4A00"
-    },
-    {
-      id: "guevara",
-      partido: "Partido Morado",
-      siglas: "PM",
-      candidato: "Mesías Guevara",
-      color: "#6B21A8"
-    },
-    {
-      id: "perez-tello",
-      partido: "Primero la Gente",
-      siglas: "PLG",
-      candidato: "Marisol Pérez Tello",
-      color: "#DB2777"
-    },
-    {
-      id: "nieto",
-      partido: "Partido del Buen Gobierno",
-      siglas: "PBG",
-      candidato: "Jorge Nieto",
-      color: "#065F46"
-    },
-    {
-      id: "espa",
-      partido: "Yo Creo en el Perú",
-      siglas: "YCP",
-      candidato: "Carlos Espá",
-      color: "#0E7490"
-    },
-    {
-      id: "grozo",
-      partido: "Integridad Democrática",
-      siglas: "ID",
-      candidato: "Wolfgang Grozo",
-      color: "#374151"
-    },
-    {
-      id: "belaunde-r",
-      partido: "Libertad Popular",
-      siglas: "LP",
-      candidato: "Rafael Belaúnde",
-      color: "#92400E"
-    },
-    {
-      id: "montoya",
-      partido: "Renacimiento Unido Nacional",
-      siglas: "RUNA",
-      candidato: "Luis Montoya",
-      color: "#166534"
-    },
-    {
-      id: "ugarte",
-      partido: "Movimiento Político Amplio",
-      siglas: "MPA",
-      candidato: "Óscar Ugarte",
-      color: "#1E3A5F"
-    },
-    {
-      id: "castillo-p",
-      partido: "Pueblo Unido",
-      siglas: "PU",
-      candidato: "Pedro Castillo",
-      color: "#7F1D1D"
-    },
-    {
-      id: "barnechea",
-      partido: "Acción Popular",
-      siglas: "AP",
-      candidato: "Alfredo Barnechea",
-      color: "#B45309"
-    },
-    {
-      id: "juarez",
-      partido: "Victoria Nacional",
-      siglas: "VN",
-      candidato: "Patricia Juárez",
-      color: "#1D4ED8"
-    },
-    {
-      id: "flores-nano",
-      partido: "Partido Popular Cristiano",
-      siglas: "PPC",
-      candidato: "Lourdes Flores Nano",
-      color: "#0F4C81"
-    },
-    {
-      id: "urresti",
-      partido: "Podemos Perú",
-      siglas: "PP",
-      candidato: "Daniel Urresti",
-      color: "#D97706"
-    },
-    {
-      id: "de-soto",
-      partido: "Progresando Perú",
-      siglas: "PROP",
-      candidato: "Hernando de Soto",
-      color: "#0D5C63"
-    },
-    {
-      id: "vilcatoma",
-      partido: "Frente Esperanza",
-      siglas: "FHESP",
-      candidato: "Yeni Vilcatoma",
-      color: "#BE185D"
-    },
-    {
-      id: "elice",
-      partido: "Fe en el Perú",
-      siglas: "FEP",
-      candidato: "Miguel Elice",
-      color: "#4338CA"
-    }
+    { id:"lopez-chau",   partido:"Ahora Nación - AN",                            candidato:"Pablo Alfonso Lopez Chau Nava",              fotoUrl:"https://mpesije.jne.gob.pe/apidocs/ddfa74eb-cae3-401c-a34c-35543ae83c57.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2980.jpg"  },
+    { id:"atencio",      partido:"Alianza Electoral Venceremos",                  candidato:"Ronald Darwin Atencio Sotomayor",             fotoUrl:"https://mpesije.jne.gob.pe/apidocs/bac0288d-3b21-45ac-8849-39f9177fb020.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/3025.jpg"  },
+    { id:"acuna",        partido:"Alianza para el Progreso",                      candidato:"Cesar Acuña Peralta",                         fotoUrl:"https://mpesije.jne.gob.pe/apidocs/d6fe3cac-7061-474b-8551-0aa686a54bad.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/1257.jpg"  },
+    { id:"williams",     partido:"Avanza País - Partido de Integración Social",   candidato:"Jose Daniel Williams Zapata",                 fotoUrl:"https://mpesije.jne.gob.pe/apidocs/b60c471f-a6bb-4b42-a4b2-02ea38acbb0d.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2173.jpg"  },
+    { id:"paz-barra",    partido:"Fe en el Perú",                                 candidato:"Alvaro Gonzalo Paz de la Barra Freigeiro",    fotoUrl:"https://mpesije.jne.gob.pe/apidocs/5032fa7f-eff1-4181-bf51-e32f2dfde304.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2898.jpg"  },
+    { id:"fujimori",     partido:"Fuerza Popular",                                candidato:"Keiko Sofia Fujimori Higuchi",                 fotoUrl:"https://mpesije.jne.gob.pe/apidocs/251cd1c0-acc7-4338-bd8a-439ccb9238d0.jpeg", logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/1366.jpg"  },
+    { id:"molinelli",    partido:"Fuerza y Libertad",                             candidato:"Fiorella Giannina Molinelli Aristondo",        fotoUrl:"https://mpesije.jne.gob.pe/apidocs/1de656b5-7593-4c60-ab7a-83d618a3d80d.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/3024.jpg"  },
+    { id:"sanchez",      partido:"Juntos por el Perú",                            candidato:"Roberto Helbert Sanchez Palomino",             fotoUrl:"https://mpesije.jne.gob.pe/apidocs/bb7c7465-9c6e-44eb-ac7d-e6cc7f872a1a.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/1264.jpg"  },
+    { id:"belaunde",     partido:"Libertad Popular",                              candidato:"Rafael Jorge Belaunde Llosa",                  fotoUrl:"https://mpesije.jne.gob.pe/apidocs/3302e45b-55c8-4979-a60b-2b11097abf1d.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2933.jpg"  },
+    { id:"valderrama",   partido:"Partido Aprista Peruano",                       candidato:"Pitter Enrique Valderrama Peña",               fotoUrl:"https://mpesije.jne.gob.pe/apidocs/d72c4b29-e173-42b8-b40d-bdb6d01a526a.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2930.jpg"  },
+    { id:"belmont",      partido:"Partido Cívico OBRAS",                          candidato:"Ricardo Pablo Belmont Cassinelli",             fotoUrl:"https://mpesije.jne.gob.pe/apidocs/78647f15-d5d1-4ed6-8ac6-d599e83eeea3.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2941.jpg"  },
+    { id:"nieto",        partido:"Partido del Buen Gobierno",                     candidato:"Jorge Nieto Montesinos",                       fotoUrl:"https://mpesije.jne.gob.pe/apidocs/9ae56ed5-3d0f-49ff-8bb9-0390bad71816.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2961.jpg"  },
+    { id:"carrasco",     partido:"Partido Demócrata Unido Perú",                  candidato:"Charlie Carrasco Salazar",                     fotoUrl:"https://mpesije.jne.gob.pe/apidocs/12fa17db-f28f-4330-9123-88549539b538.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2867.jpg"  },
+    { id:"gonzales",     partido:"Partido Demócrata Verde",                       candidato:"Alex Gonzales Castillo",                       fotoUrl:"https://mpesije.jne.gob.pe/apidocs/c0ae56bf-21c1-4810-890a-b25c8465bdd9.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2895.jpg"  },
+    { id:"masse",        partido:"Partido Democrático Federal",                   candidato:"Armando Joaquin Masse Fernandez",              fotoUrl:"https://mpesije.jne.gob.pe/apidocs/cb1adeb7-7d2f-430c-ae87-519137d8edfa.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2986.jpg"  },
+    { id:"forsyth",      partido:"Partido Democrático Somos Perú",                candidato:"George Patrick Forsyth Sommer",                fotoUrl:"https://mpesije.jne.gob.pe/apidocs/b1d60238-c797-4cba-936e-f13de6a34cc7.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/14.jpg"    },
+    { id:"olivera",      partido:"Partido Frente de la Esperanza 2021",           candidato:"Luis Fernando Olivera Vega",                   fotoUrl:"https://mpesije.jne.gob.pe/apidocs/3e2312e1-af79-4954-abfa-a36669c1a9e9.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2857.jpg"  },
+    { id:"guevara",      partido:"Partido Morado",                                candidato:"Mesias Antonio Guevara Amasifuen",             fotoUrl:"https://mpesije.jne.gob.pe/apidocs/1b861ca7-3a5e-48b4-9024-08a92371e33b.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2840.jpg"  },
+    { id:"alvarez",      partido:"Partido País Para Todos",                       candidato:"Carlos Gonsalo Alvarez Loayza",                fotoUrl:"https://mpesije.jne.gob.pe/apidocs/2bd18177-d665-413d-9694-747d729d3e39.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2956.jpg"  },
+    { id:"caller",       partido:"Partido Patriótico del Perú",                   candidato:"Herbert Caller Gutierrez",                     fotoUrl:"https://mpesije.jne.gob.pe/apidocs/6ad6c5ff-0411-4ddd-9cf7-b0623f373fcf.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2869.jpg"  },
+    { id:"lescano",      partido:"Partido Político Cooperación Popular",          candidato:"Yonhy Lescano Ancieta",                        fotoUrl:"https://mpesije.jne.gob.pe/apidocs/b9db2b5c-02ff-4265-ae51-db9b1001ad70.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2995.jpg"  },
+    { id:"grozo",        partido:"Partido Político Integridad Democrática",       candidato:"Wolfgang Mario Grozo Costa",                   fotoUrl:"https://mpesije.jne.gob.pe/apidocs/064360d1-ce49-4abe-939c-f4de8b0130a2.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2985.jpg"  },
+    { id:"cerron",       partido:"Partido Político Nacional Perú Libre",          candidato:"Vladimir Roy Cerron Rojas",                    fotoUrl:"https://mpesije.jne.gob.pe/apidocs/82ee0ff2-2336-4aba-9590-e576f7564315.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2218.jpg"  },
+    { id:"diez-canseco", partido:"Partido Político Perú Acción",                  candidato:"Francisco Ernesto Diez-Canseco Távara",        fotoUrl:"https://mpesije.jne.gob.pe/apidocs/2d1bf7f2-6e88-4ea9-8ed2-975c1ae5fb92.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2932.jpg"  },
+    { id:"vizcarra",     partido:"Partido Político Perú Primero",                 candidato:"Mario Enrique Vizcarra Cornejo",               fotoUrl:"https://mpesije.jne.gob.pe/apidocs/ee7a080e-bc81-4c81-9e5e-9fd95ff459ab.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2925.jpg"  },
+    { id:"chirinos",     partido:"Partido Político PRIN",                         candidato:"Walter Gilmer Chirinos Purizaga",              fotoUrl:"https://mpesije.jne.gob.pe/apidocs/a2d0f631-fe47-4c41-92ba-7ed9f4095520.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2921.jpg"  },
+    { id:"espa",         partido:"Partido SICREO",                                candidato:"Alfonso Carlos Espa y Garces-Alvear",          fotoUrl:"https://mpesije.jne.gob.pe/apidocs/85935f77-6c46-4eab-8c7e-2494ffbcece0.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2935.jpg"  },
+    { id:"jaico",        partido:"Perú Moderno",                                  candidato:"Carlos Ernesto Jaico Carranza",                fotoUrl:"https://mpesije.jne.gob.pe/apidocs/7d91e14f-4417-4d61-89ba-3e686dafaa95.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2924.jpg"  },
+    { id:"luna",         partido:"Podemos Perú",                                  candidato:"Jose Leon Luna Galvez",                        fotoUrl:"https://mpesije.jne.gob.pe/apidocs/a669a883-bf8a-417c-9296-c14b943c3943.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2731.jpg"  },
+    { id:"perez-tello",  partido:"Primero la Gente",                              candidato:"Maria Soledad Perez Tello de Rodriguez",       fotoUrl:"https://mpesije.jne.gob.pe/apidocs/073703ca-c427-44f0-94b1-a782223a5e10.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2931.jpg"  },
+    { id:"jaimes",       partido:"Progresemos",                                   candidato:"Paul Davis Jaimes Blanco",                     fotoUrl:"https://mpesije.jne.gob.pe/apidocs/929e1a63-335d-4f3a-ba26-f3c7ff136213.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2967.jpg"  },
+    { id:"lopez-aliaga", partido:"Renovación Popular",                            candidato:"Rafael Bernardo Lopez Aliaga Cazorla",         fotoUrl:"https://mpesije.jne.gob.pe/apidocs/b2e00ae2-1e50-4ad3-a103-71fc7e4e8255.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/22.jpg"    },
+    { id:"ortiz",        partido:"Salvemos al Perú",                              candidato:"Antonio Ortiz Villano",                        fotoUrl:"https://mpesije.jne.gob.pe/apidocs/8e6b9124-2883-4143-8768-105f2ce780eb.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2927.jpg"  },
+    { id:"fernandez-r",  partido:"Un Camino Diferente",                           candidato:"Rosario del Pilar Fernandez Bazan",            fotoUrl:"https://mpesije.jne.gob.pe/apidocs/ac0b0a59-ead5-4ef1-8ef8-8967e322d6ca.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/2998.jpg"  },
+    { id:"chiabra",      partido:"Unidad Nacional",                               candidato:"Roberto Enrique Chiabra Leon",                 fotoUrl:"https://mpesije.jne.gob.pe/apidocs/5c703ce9-ba1e-4490-90bf-61006740166f.jpg",  logoUrl:"https://votoinformado.jne.gob.pe/LogoOp/3023.jpg"  },
   ];
 
   CANDIDATOS_BASE.forEach((c, i) => c.orden = i + 1);
 
-  const STORAGE_KEY = "peru2026_candidatos";
+  const STORAGE_KEY = "peru2026_v2";
 
   function cargarEstado() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : {};
-    } catch { return {}; }
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+    catch { return {}; }
   }
 
-  function guardarEstado(estado) {
+  function guardarEstado() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(estado));
   }
 
   let estado = cargarEstado();
 
-  // Inicializar estado por defecto
   CANDIDATOS_BASE.forEach(c => {
-    if (!estado[c.id]) {
-      estado[c.id] = { comentario: "", desestimado: false };
-    }
+    if (!estado[c.id]) estado[c.id] = { comentario: "", desestimado: false };
   });
 
-  function crearCard(candidato, orden) {
-    const info = estado[candidato.id];
+  function initials(str) {
+    return str.split(/\s+/).slice(0, 3).map(w => w[0]).join("").toUpperCase();
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  }
+
+  function crearCard(c) {
+    const info = estado[c.id];
     const card = document.createElement("div");
     card.className = "card" + (info.desestimado ? " desestimado" : "");
-    card.dataset.id = candidato.id;
-    card.style.setProperty("--party-color", candidato.color);
+    card.dataset.id = c.id;
+
+    const logoUrl = c.logoUrl;
+    const fotoUrl = c.fotoUrl;
+    const inits   = initials(c.partido);
 
     card.innerHTML = `
-      <div class="card-top">
-        <div class="party-logo">${candidato.siglas}</div>
+      <div class="card-left">
+        <div class="party-logo-wrap">
+          <img src="${logoUrl}" alt="${escapeHtml(c.partido)}"
+               onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+          <div class="party-logo-fallback" style="display:none">${inits}</div>
+        </div>
+        <div class="candidate-photo-wrap">
+          <img src="${fotoUrl}" alt="${escapeHtml(c.candidato)}"
+               onerror="this.style.opacity='0'">
+        </div>
+      </div>
+      <div class="card-content">
         <div class="card-info">
-          <div class="party-name">${candidato.partido}</div>
-          <div class="candidate-name">${candidato.candidato}</div>
+          <div class="party-name">${escapeHtml(c.partido)}</div>
+          <div class="candidate-name">${escapeHtml(c.candidato)}</div>
           <div class="badge-desestimado">Desestimado</div>
         </div>
-        <div class="order-num">#${orden}</div>
+        <div class="card-bottom">
+          <textarea placeholder="Escribe un comentario...">${escapeHtml(info.comentario)}</textarea>
+          ${info.desestimado
+            ? `<button class="btn-restaurar">Restaurar</button>`
+            : `<button class="btn-desestimar">Desestimar</button>`}
+        </div>
       </div>
-      <div class="card-bottom">
-        <textarea placeholder="Escribe un comentario...">${escapeHtml(info.comentario)}</textarea>
-        ${info.desestimado
-          ? `<button class="btn-restaurar">Restaurar</button>`
-          : `<button class="btn-desestimar">Desestimar</button>`
-        }
-      </div>
-    `;
+      <div class="order-num">#${c.orden}</div>`;
 
-    const textarea = card.querySelector("textarea");
-    textarea.addEventListener("input", () => {
-      estado[candidato.id].comentario = textarea.value;
-      guardarEstado(estado);
+    card.querySelector("textarea").addEventListener("input", e => {
+      estado[c.id].comentario = e.target.value;
+      guardarEstado();
     });
 
-    const btn = card.querySelector("button");
-    btn.addEventListener("click", () => {
-      if (info.desestimado) {
-        estado[candidato.id].desestimado = false;
-      } else {
-        estado[candidato.id].desestimado = true;
-      }
-      guardarEstado(estado);
+    card.querySelector("button").addEventListener("click", () => {
+      estado[c.id].desestimado = !info.desestimado;
+      guardarEstado();
       renderListas();
     });
 
     return card;
   }
 
-  function escapeHtml(str) {
-    return str
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;");
-  }
-
   function renderListas() {
-    const listaActivos = document.getElementById("candidatos-lista");
-    const listaDesestimados = document.getElementById("desestimados-lista");
-    const seccionDesestimados = document.getElementById("seccion-desestimados");
+    const listA = document.getElementById("candidatos-lista");
+    const listD = document.getElementById("desestimados-lista");
+    const secD  = document.getElementById("seccion-desestimados");
 
-    listaActivos.innerHTML = "";
-    listaDesestimados.innerHTML = "";
+    listA.innerHTML = "";
+    listD.innerHTML = "";
 
-    const activos = CANDIDATOS_BASE.filter(c => !estado[c.id]?.desestimado);
-    const desestimados = CANDIDATOS_BASE.filter(c => estado[c.id]?.desestimado);
+    const activos      = CANDIDATOS_BASE.filter(c => !estado[c.id]?.desestimado);
+    const desestimados = CANDIDATOS_BASE.filter(c =>  estado[c.id]?.desestimado);
 
-    activos.forEach((c, i) => listaActivos.appendChild(crearCard(c, c.orden)));
-    desestimados.forEach((c, i) => listaDesestimados.appendChild(crearCard(c, c.orden)));
+    activos.forEach(c      => listA.appendChild(crearCard(c)));
+    desestimados.forEach(c => listD.appendChild(crearCard(c)));
 
-    seccionDesestimados.style.display = desestimados.length > 0 ? "block" : "none";
+    secD.style.display = desestimados.length ? "block" : "none";
   }
 
   function limpiarTodo() {
     if (!confirm("¿Seguro que quieres limpiar todos los comentarios y restaurar todos los candidatos?")) return;
     localStorage.removeItem(STORAGE_KEY);
     estado = {};
-    CANDIDATOS_BASE.forEach(c => {
-      estado[c.id] = { comentario: "", desestimado: false };
-    });
+    CANDIDATOS_BASE.forEach(c => { estado[c.id] = { comentario: "", desestimado: false }; });
     renderListas();
   }
 
