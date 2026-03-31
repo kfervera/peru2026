@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Candidatos Presidenciales Perú 2026</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #f0f2f5;
+      color: #222;
+      padding: 24px 16px;
+      min-height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    header h1 {
+      font-size: clamp(1.3rem, 4vw, 1.8rem);
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+
+    header p {
+      color: #555;
+      margin-top: 6px;
+      font-size: 0.95rem;
+    }
+
+    .btn-limpiar {
+      margin-top: 14px;
+      padding: 8px 22px;
+      border: 1.5px solid #d1d5db;
+      border-radius: 8px;
+      background: #fff;
+      color: #6b7280;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+
+    .btn-limpiar:hover {
+      background: #fef2f2;
+      color: #b91c1c;
+      border-color: #fca5a5;
+    }
+
+    .btn-limpiar:active { transform: scale(0.97); }
+
+    .flag-strip {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin: 12px auto;
+      width: 180px;
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .flag-strip span { flex: 1; }
+    .flag-strip span:nth-child(1) { background: #D91023; }
+    .flag-strip span:nth-child(2) { background: #ffffff; }
+    .flag-strip span:nth-child(3) { background: #D91023; }
+
+    .main-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    #candidatos-lista {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: opacity 0.3s, transform 0.3s;
+      border-left: 5px solid var(--party-color, #ccc);
+    }
+
+    .card.desestimado {
+      opacity: 0.55;
+      background: #f8f8f8;
+      border-left-color: #999;
+    }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: relative;
+    }
+
+    .order-num {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      color: #aaa;
+      background: #f0f0f0;
+      border-radius: 20px;
+      padding: 2px 8px;
+      letter-spacing: 0.3px;
+    }
+
+    .desestimado .order-num { color: #ccc; }
+
+    .party-logo {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 0.9rem;
+      color: #fff;
+      background: var(--party-color, #888);
+      text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+      letter-spacing: 0.5px;
+      line-height: 1.1;
+      text-align: center;
+      padding: 4px;
+      border: 3px solid rgba(255,255,255,0.5);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+
+    .card-info { flex: 1; min-width: 0; }
+
+    .party-name {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--party-color, #555);
+      margin-bottom: 3px;
+    }
+
+    .candidate-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #1a1a2e;
+    }
+
+    .desestimado .candidate-name,
+    .desestimado .party-name { color: #999; }
+
+    .badge-desestimado {
+      display: none;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #fff;
+      background: #999;
+      border-radius: 20px;
+      padding: 2px 10px;
+      margin-top: 5px;
+      width: fit-content;
+    }
+
+    .desestimado .badge-desestimado { display: block; }
+
+    .card-bottom {
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .card-bottom textarea {
+      flex: 1;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-size: 0.88rem;
+      font-family: inherit;
+      resize: none;
+      height: 48px;
+      transition: border-color 0.2s;
+      background: #fafafa;
+      color: #333;
+    }
+
+    .card-bottom textarea:focus {
+      outline: none;
+      border-color: var(--party-color, #888);
+      background: #fff;
+    }
+
+    .desestimado .card-bottom textarea {
+      background: #f0f0f0;
+      color: #aaa;
+    }
+
+    .btn-desestimar {
+      padding: 0 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      white-space: nowrap;
+      background: #fee2e2;
+      color: #c0392b;
+      transition: background 0.2s, transform 0.1s;
+      min-height: 40px;
+    }
+
+    .btn-desestimar:hover { background: #fecaca; transform: scale(1.03); }
+    .btn-desestimar:active { transform: scale(0.97); }
+
+    .btn-restaurar {
+      padding: 0 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      white-space: nowrap;
+      background: #e0f2fe;
+      color: #0369a1;
+      transition: background 0.2s, transform 0.1s;
+      min-height: 40px;
+    }
+
+    .btn-restaurar:hover { background: #bae6fd; transform: scale(1.03); }
+    .btn-restaurar:active { transform: scale(0.97); }
+
+    .seccion-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #999;
+      padding: 0 4px;
+      margin: 20px 0 6px;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.78rem;
+      color: #aaa;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      body { padding: 16px 10px; }
+
+      .card { padding: 14px 14px; }
+
+      .party-logo {
+        width: 46px;
+        height: 46px;
+        font-size: 0.75rem;
+      }
+
+      .candidate-name { font-size: 0.97rem; }
+
+      .card-bottom {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .card-bottom textarea { height: 42px; }
+
+      .btn-desestimar,
+      .btn-restaurar {
+        width: 100%;
+        padding: 10px;
+        font-size: 0.8rem;
+      }
+
+      .order-num {
+        top: -4px;
+        right: -2px;
+        font-size: 0.65rem;
+        padding: 2px 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="flag-strip"><span></span><span></span><span></span></div>
+  <h1>Elecciones Presidenciales Perú 2026</h1>
+  <p>12 de abril de 2026 &mdash; Lista de candidatos</p>
+  <button class="btn-limpiar" id="btn-limpiar" onclick="limpiarTodo()">&#x21BA; Limpiar todos los cambios</button>
+</header>
+
+<div class="main-container">
+  <div id="seccion-activos" class="seccion-label">Candidatos</div>
+  <div id="candidatos-lista"></div>
+  <div id="seccion-desestimados" class="seccion-label" style="display:none;">Desestimados</div>
+  <div id="desestimados-lista" style="display:flex;flex-direction:column;gap:14px;"></div>
+  <footer>Los datos mostrados corresponden a los candidatos inscritos para las elecciones generales del 12 de abril de 2026.</footer>
+</div>
+
+<script>
+  const CANDIDATOS_BASE = [
+    {
+      id: "keiko",
+      partido: "Fuerza Popular",
+      siglas: "FP",
+      candidato: "Keiko Fujimori",
+      color: "#E8590C"
+    },
+    {
+      id: "lopez-aliaga",
+      partido: "Renovación Popular",
+      siglas: "RP",
+      candidato: "Rafael López Aliaga",
+      color: "#1A9FD5"
+    },
+    {
+      id: "acuna",
+      partido: "Alianza para el Progreso",
+      siglas: "APP",
+      candidato: "César Acuña",
+      color: "#003F8A"
+    },
+    {
+      id: "forsyth",
+      partido: "Somos Perú",
+      siglas: "SP",
+      candidato: "George Forsyth",
+      color: "#CC0000"
+    },
+    {
+      id: "luna",
+      partido: "Podemos Perú",
+      siglas: "PP",
+      candidato: "José Luna Gálvez",
+      color: "#F5A623"
+    },
+    {
+      id: "williams",
+      partido: "Avanza País",
+      siglas: "AvP",
+      candidato: "José Williams Zapata",
+      color: "#2D7A2D"
+    },
+    {
+      id: "valderrama",
+      partido: "Partido Aprista Peruano",
+      siglas: "APRA",
+      candidato: "Enrique Valderrama",
+      color: "#8B0000"
+    },
+    {
+      id: "sanchez",
+      partido: "Juntos por el Perú",
+      siglas: "JP",
+      candidato: "Roberto Sánchez",
+      color: "#6A0DAD"
+    },
+    {
+      id: "lescano",
+      partido: "Acción Popular",
+      siglas: "AP",
+      candidato: "Yonhy Lescano",
+      color: "#D4A017"
+    },
+    {
+      id: "olivera",
+      partido: "Frente de la Esperanza",
+      siglas: "FE",
+      candidato: "Fernando Olivera",
+      color: "#1B6CA8"
+    },
+    {
+      id: "alvarez",
+      partido: "País Para Todos",
+      siglas: "PPT",
+      candidato: "Carlos Álvarez",
+      color: "#444444"
+    },
+    {
+      id: "lopez-chau",
+      partido: "Ahora Nación",
+      siglas: "AN",
+      candidato: "Alfonso López-Chau",
+      color: "#B22222"
+    },
+    {
+      id: "molinelli",
+      partido: "Fuerza y Libertad",
+      siglas: "FL",
+      candidato: "Fiorella Molinelli",
+      color: "#7B3F9E"
+    },
+    {
+      id: "chiabra",
+      partido: "Unidad Nacional",
+      siglas: "UN",
+      candidato: "Roberto Chiabra",
+      color: "#00695C"
+    },
+    {
+      id: "cerron",
+      partido: "Perú Libre",
+      siglas: "PL",
+      candidato: "Vladimir Cerrón",
+      color: "#D00000"
+    },
+    {
+      id: "vizcarra",
+      partido: "Perú Primero",
+      siglas: "PP1",
+      candidato: "Mario Vizcarra",
+      color: "#1B3A6B"
+    },
+    {
+      id: "belmont",
+      partido: "OBRAS",
+      siglas: "OBR",
+      candidato: "Ricardo Belmont",
+      color: "#2255A4"
+    },
+    {
+      id: "humala-antauro",
+      partido: "Partido Ande",
+      siglas: "ANDE",
+      candidato: "Antauro Humala",
+      color: "#5A4A00"
+    },
+    {
+      id: "guevara",
+      partido: "Partido Morado",
+      siglas: "PM",
+      candidato: "Mesías Guevara",
+      color: "#6B21A8"
+    },
+    {
+      id: "perez-tello",
+      partido: "Primero la Gente",
+      siglas: "PLG",
+      candidato: "Marisol Pérez Tello",
+      color: "#DB2777"
+    },
+    {
+      id: "nieto",
+      partido: "Partido del Buen Gobierno",
+      siglas: "PBG",
+      candidato: "Jorge Nieto",
+      color: "#065F46"
+    },
+    {
+      id: "espa",
+      partido: "Yo Creo en el Perú",
+      siglas: "YCP",
+      candidato: "Carlos Espá",
+      color: "#0E7490"
+    },
+    {
+      id: "grozo",
+      partido: "Integridad Democrática",
+      siglas: "ID",
+      candidato: "Wolfgang Grozo",
+      color: "#374151"
+    },
+    {
+      id: "belaunde-r",
+      partido: "Libertad Popular",
+      siglas: "LP",
+      candidato: "Rafael Belaúnde",
+      color: "#92400E"
+    },
+    {
+      id: "montoya",
+      partido: "Renacimiento Unido Nacional",
+      siglas: "RUNA",
+      candidato: "Luis Montoya",
+      color: "#166534"
+    },
+    {
+      id: "ugarte",
+      partido: "Movimiento Político Amplio",
+      siglas: "MPA",
+      candidato: "Óscar Ugarte",
+      color: "#1E3A5F"
+    },
+    {
+      id: "castillo-p",
+      partido: "Pueblo Unido",
+      siglas: "PU",
+      candidato: "Pedro Castillo",
+      color: "#7F1D1D"
+    },
+    {
+      id: "barnechea",
+      partido: "Acción Popular",
+      siglas: "AP",
+      candidato: "Alfredo Barnechea",
+      color: "#B45309"
+    },
+    {
+      id: "juarez",
+      partido: "Victoria Nacional",
+      siglas: "VN",
+      candidato: "Patricia Juárez",
+      color: "#1D4ED8"
+    },
+    {
+      id: "flores-nano",
+      partido: "Partido Popular Cristiano",
+      siglas: "PPC",
+      candidato: "Lourdes Flores Nano",
+      color: "#0F4C81"
+    },
+    {
+      id: "urresti",
+      partido: "Podemos Perú",
+      siglas: "PP",
+      candidato: "Daniel Urresti",
+      color: "#D97706"
+    },
+    {
+      id: "de-soto",
+      partido: "Progresando Perú",
+      siglas: "PROP",
+      candidato: "Hernando de Soto",
+      color: "#0D5C63"
+    },
+    {
+      id: "vilcatoma",
+      partido: "Frente Esperanza",
+      siglas: "FHESP",
+      candidato: "Yeni Vilcatoma",
+      color: "#BE185D"
+    },
+    {
+      id: "elice",
+      partido: "Fe en el Perú",
+      siglas: "FEP",
+      candidato: "Miguel Elice",
+      color: "#4338CA"
+    }
+  ];
+
+  CANDIDATOS_BASE.forEach((c, i) => c.orden = i + 1);
+
+  const STORAGE_KEY = "peru2026_candidatos";
+
+  function cargarEstado() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch { return {}; }
+  }
+
+  function guardarEstado(estado) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(estado));
+  }
+
+  let estado = cargarEstado();
+
+  // Inicializar estado por defecto
+  CANDIDATOS_BASE.forEach(c => {
+    if (!estado[c.id]) {
+      estado[c.id] = { comentario: "", desestimado: false };
+    }
+  });
+
+  function crearCard(candidato, orden) {
+    const info = estado[candidato.id];
+    const card = document.createElement("div");
+    card.className = "card" + (info.desestimado ? " desestimado" : "");
+    card.dataset.id = candidato.id;
+    card.style.setProperty("--party-color", candidato.color);
+
+    card.innerHTML = `
+      <div class="card-top">
+        <div class="party-logo">${candidato.siglas}</div>
+        <div class="card-info">
+          <div class="party-name">${candidato.partido}</div>
+          <div class="candidate-name">${candidato.candidato}</div>
+          <div class="badge-desestimado">Desestimado</div>
+        </div>
+        <div class="order-num">#${orden}</div>
+      </div>
+      <div class="card-bottom">
+        <textarea placeholder="Escribe un comentario...">${escapeHtml(info.comentario)}</textarea>
+        ${info.desestimado
+          ? `<button class="btn-restaurar">Restaurar</button>`
+          : `<button class="btn-desestimar">Desestimar</button>`
+        }
+      </div>
+    `;
+
+    const textarea = card.querySelector("textarea");
+    textarea.addEventListener("input", () => {
+      estado[candidato.id].comentario = textarea.value;
+      guardarEstado(estado);
+    });
+
+    const btn = card.querySelector("button");
+    btn.addEventListener("click", () => {
+      if (info.desestimado) {
+        estado[candidato.id].desestimado = false;
+      } else {
+        estado[candidato.id].desestimado = true;
+      }
+      guardarEstado(estado);
+      renderListas();
+    });
+
+    return card;
+  }
+
+  function escapeHtml(str) {
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function renderListas() {
+    const listaActivos = document.getElementById("candidatos-lista");
+    const listaDesestimados = document.getElementById("desestimados-lista");
+    const seccionDesestimados = document.getElementById("seccion-desestimados");
+
+    listaActivos.innerHTML = "";
+    listaDesestimados.innerHTML = "";
+
+    const activos = CANDIDATOS_BASE.filter(c => !estado[c.id]?.desestimado);
+    const desestimados = CANDIDATOS_BASE.filter(c => estado[c.id]?.desestimado);
+
+    activos.forEach((c, i) => listaActivos.appendChild(crearCard(c, c.orden)));
+    desestimados.forEach((c, i) => listaDesestimados.appendChild(crearCard(c, c.orden)));
+
+    seccionDesestimados.style.display = desestimados.length > 0 ? "block" : "none";
+  }
+
+  function limpiarTodo() {
+    if (!confirm("¿Seguro que quieres limpiar todos los comentarios y restaurar todos los candidatos?")) return;
+    localStorage.removeItem(STORAGE_KEY);
+    estado = {};
+    CANDIDATOS_BASE.forEach(c => {
+      estado[c.id] = { comentario: "", desestimado: false };
+    });
+    renderListas();
+  }
+
+  renderListas();
+</script>
+</body>
+</html>
